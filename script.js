@@ -1,5 +1,12 @@
 function sendLove() {
-    alert("💕 爱心已发送！对方收到了你的思念~");
+    // 1. 获取那个隐形的播放器
+    const audio = document.getElementById('myAudio');
+    // 2. 播放音乐
+    audio.play().catch(error => {
+        console.log("播放失败，可能是文件路径不对:", error);
+    });
+    // 3. 原有的弹出提示（也可以改成更浪漫的话）
+    alert("💕 思念已送达，这首歌送给你~");
 }// script.js
 function updateTimer() {
     const startDate = new Date('2023-02-24 22:30:00'); // 👈 改成你们在一起的确切时间
@@ -55,3 +62,4 @@ function createHeart() {
 
 // 每 300 毫秒生成一个爱心
 setInterval(createHeart, 300);
+
