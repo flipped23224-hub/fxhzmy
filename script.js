@@ -1,72 +1,83 @@
-function sendLove() {
+/**
+ * 恋爱网页核心逻辑 - 全能版
+ */
+
+// 1. 当页面全部加载完毕后，再执行里面的逻辑（确保能抓到按钮和播放器）
+window.onload = function() {
+    console.log("网页已就绪！");
+
+    // 获取隐形的音乐播放器
     const audio = document.getElementById('myAudio');
-    
-    // 强制从头开始播放
-    audio.currentTime = 0; 
-    
-    // 尝试播放并捕获报错
-    audio.play().then(() => {
-        console.log("音乐开始播放了！");
-        alert("💕 思念已送达，听听这首歌~");
-    }).catch(error => {
-        // 如果失败了，会在浏览器控制台告诉你为什么
-        console.error("播放失败的原因是:", error);
-        alert("音乐加载中，请稍等一秒再试哦！");
-    });
-}// script.js
+
+    // --- 功能 A: 绑定点击按钮发送思念 ---
+    window.sendLove = function() {
+        console.log("按钮被点击了");
+        
+        // 播放音乐
+        if (audio) {
+            audio.play().then(() => {
+                console.log("音乐奏响成功！");
+            }).catch(err => {
+                console.warn("音乐播放受阻，可能是还没加载完:", err);
+            });
+        }
+
+        // 弹出甜蜜提示
+        alert("💕 思念已送达，听听这首属于我们的歌~");
+    };
+
+    // --- 功能 B: 开启爱心雨特效 ---
+    // 每隔 300 毫秒生成一个爱心
+    setInterval(createHeart, 300);
+};
+
+// --- 功能 C: 恋爱计时器逻辑 ---
 function updateTimer() {
-    const startDate = new Date('2023-02-24 22:30:00'); // 👈 改成你们在一起的确切时间
+    const startDate = new Date('2023-02-24 22:30:00'); // 👈 重要：记得改成你们的纪念日！
     const now = new Date();
-    
     const diff = now - startDate; // 毫秒差
 
-    // 计算天、时、分、秒
+    if (diff < 0) {
+        document.getElementById('timer').innerText = "期待我们的开始";
+        return;
+    }
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
 
-    // 把数字填进网页里
+    // 更新到网页上的对应 ID 元素
     document.getElementById('d').innerText = days;
     document.getElementById('h').innerText = hours;
     document.getElementById('m').innerText = minutes;
     document.getElementById('s').innerText = seconds;
 }
 
-// 每隔 1 秒执行一次 updateTimer
+// 每秒更新一次计时器
 setInterval(updateTimer, 1000);
+updateTimer(); // 立即执行一次，防止首秒空白
 
-// 页面一加载就先执行一次，避免 1 秒的空白
-updateTimer();
-
-function sendLove() {
-    alert("💕 信号已发射！记得看手机哦~");
-
-}
+// --- 功能 D: 制造飘落爱心的函数 ---
 function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('heart-falling');
-    heart.innerHTML = '❤️'; // 你也可以换成 💕 或 🌸
+    heart.innerHTML = '❤️'; 
     
-    // 随机位置
+    // 随机位置 (0-100vw 代表屏幕宽度)
     heart.style.left = Math.random() * 100 + 'vw';
     
-    // 随机大小
+    // 随机大小 (10px - 30px)
     heart.style.fontSize = Math.random() * 20 + 10 + 'px';
     
-    // 随机掉落速度 (2s 到 5s 之间)
+    // 随机掉落速度 (2s 到 5s)
     const duration = Math.random() * 3 + 2;
     heart.style.animationDuration = duration + 's';
     
     document.body.appendChild(heart);
 
-    // 动画结束后，把这个爱心从网页里删掉，不然网页会卡
+    // 动画结束后自动删除，释放内存
     setTimeout(() => {
         heart.remove();
     }, duration * 1000);
 }
-
-// 每 300 毫秒生成一个爱心
-setInterval(createHeart, 300);
-
-
