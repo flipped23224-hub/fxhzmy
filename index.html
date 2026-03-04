@@ -2,15 +2,21 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我们的浪漫时光</title>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <audio id="myAudio" src="music.mp3" loop></audio>
+
     <div class="card">
-        <div class="photo-frame">
-            <img src="love.jpg" alt="我们的合照" id="love-img">
+        <div class="album-container">
+            <div class="swiper" id="photo-list">
+                </div>
+            <div class="album-nav">
+                <span onclick="prevSlide()">❮</span>
+                <span onclick="nextSlide()">❯</span>
+            </div>
         </div>
 
         <h1>❤️ 我们的恋爱计时</h1>
@@ -25,9 +31,8 @@
         <button onclick="sendLove()">发送一份思念</button>
     </div>
 
+    <audio id="myAudio" src="music.mp3" loop></audio>
+
     <script src="script.js"></script>
 </body>
-
 </html>
-
-
