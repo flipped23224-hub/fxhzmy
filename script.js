@@ -30,131 +30,93 @@ const START_DATE_STR = '2023-02-24 22:30:00';
 
 const TOTAL_PHOTOS = 20; 
 let currentSlide = 0;
+// 使用 DOMContentLoaded 确保 HTML 加载完后再运行
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("🚀 恋爱网页启动中...");
+    
+    // 初始化计时器
+    startTimer();
+    
+    // 初始化相册
+    initAlbum();
+    
+    // 启动特效
+    setInterval(createHeart, 300);
+    setInterval(nextSlide, 5000);
+});
 
-window.onload = function() {
-    initAlbum(); 
-    setInterval(createHeart, 300); // 开启爱心雨
-    setInterval(nextSlide, 5000);  // 开启自动切图
-};
-// 1. 当页面全部加载完毕后，再执行里面的逻辑（确保能抓到按钮和播放器）
-window.onload = function() {
-    console.log("网页已就绪！");
-
-    // 获取隐形的音乐播放器
-    const audio = document.getElementById('myAudio');
-
-    // --- 功能 A: 绑定点击按钮发送思念 ---
-    window.sendLove = function() {
-        console.log("按钮被点击了");
-        
-        // 播放音乐
-        if (audio) {
-            audio.play().then(() => {
-                console.log("音乐奏响成功！");
-            }).catch(err => {
-                console.warn("音乐播放受阻，可能是还没加载完:", err);
-            });
-        }
-
-        // 弹出甜蜜提示
-        alert("💕 思念已送达，听听这首属于我们的歌~");
-    };
-};
-
-// 初始化相册
 function initAlbum() {
     const photoList = document.getElementById('photo-list');
-    
-    // 监控点 1：检查能不能找到盒子
     if (!photoList) {
-        console.error("【关键错误】：在 HTML 里找不到 id 为 photo-list 的 div！");
+        console.error("❌ 找不到 photo-list 盒子，请检查 HTML！");
         return;
     }
 
-    console.log("【提示】：找到盒子了，准备装载 " + TOTAL_PHOTOS + " 张照片...");
+    photoList.innerHTML = ''; // 清空可能存在的旧内容
 
     for (let i = 1; i <= TOTAL_PHOTOS; i++) {
         const slideWrap = document.createElement('div');
-        slideWrap.classList.add('slide');
-        if (i === 1) slideWrap.classList.add('active');
+        slideWrap.className = (i === 1) ? 'slide active' : 'slide';
 
         const img = document.createElement('img');
-        img.src = `${i}.jpg`; 
+        // 👇 如果你的照片后缀是大写，请把下面的 .jpg 改成 .JPG
+        img.src = i + '.jpg'; 
         
-        // 监控点 2：检查照片文件是否正常触发加载
-        img.onerror = function() {
-            console.warn("【警告】：照片 " + i + ".jpg 加载失败，请检查文件名和后缀！");
-        };
+        // 监控照片加载
+        img.onerror = () => console.warn(`⚠️ 无法加载照片: ${i}.jpg`);
 
         const noteDiv = document.createElement('div');
-        noteDiv.classList.add('photo-note');
-        noteDiv.innerText = loveNotes[i-1] || "每一个瞬间都值得被记录";
+        noteDiv.className = 'photo-note';
+        noteDiv.innerText = loveNotes[i-1] || "每一个瞬间都值得铭记 ❤️";
 
         slideWrap.appendChild(img);
         slideWrap.appendChild(noteDiv);
         photoList.appendChild(slideWrap);
     }
-    
-    // 监控点 3：确认循环是否跑完
-    console.log("【完成】：照片标签全部生成完毕！");
+    console.log("✅ 相册初始化完成，共装载 " + TOTAL_PHOTOS + " 张照片");
 }
 
-// 切换照片逻辑
 function showSlide(index) {
-    const slides = document.getElementsByClassName('slide');
+    const slides = document.querySelectorAll('.slide');
     if (slides.length === 0) return;
-    if (index >= slides.length) currentSlide = 0;
-    else if (index < 0) currentSlide = slides.length - 1;
-    else currentSlide = index;
-
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].classList.remove('active');
-    }
+    
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (index + slides.length) % slides.length;
     slides[currentSlide].classList.add('active');
 }
 
 function nextSlide() { showSlide(currentSlide + 1); }
 function prevSlide() { showSlide(currentSlide - 1); }
 
-// 倒计时逻辑
-function updateTimer() {
-    const startDate = new Date('2023-02-24 22:30:00'); // 👈 重要：记得改成你们的纪念日！
-    const now = new Date();
-    const diff = now - startDate; // 毫秒差
-
-    if (diff < 0) {
-        document.getElementById('timer').innerText = "期待我们的开始";
-        return;
+function sendLove() {
+    const audio = document.getElementById('myAudio');
+    if (audio) {
+        audio.play().then(() => console.log("🎵 音乐播放中")).catch(e => console.log("🔇 自动播放被拦截"));
     }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    // 更新到网页上的对应 ID 元素
-    document.getElementById('d').innerText = days;
-    document.getElementById('h').innerText = hours;
-    document.getElementById('m').innerText = minutes;
-    document.getElementById('s').innerText = seconds;
+    alert("💕 思念已送达！");
 }
 
-// 每秒更新一次计时器
-setInterval(updateTimer, 1000);
-updateTimer(); // 立即执行一次，防止首秒空白
+function startTimer() {
+    setInterval(() => {
+        const diff = new Date() - new Date(START_DATE_STR);
+        if (isNaN(diff)) return;
+        document.getElementById('d').innerText = Math.floor(diff / 86400000);
+        document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
+        document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
+        document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
+    }, 1000);
+}
 
-// 爱心雨逻辑
 function createHeart() {
     const heart = document.createElement('div');
-    heart.classList.add('heart-falling');
+    heart.className = 'heart-falling';
     heart.innerHTML = '❤️'; 
     heart.style.left = Math.random() * 100 + 'vw';
     heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-    const duration = Math.random() * 3 + 2;
-    heart.style.animationDuration = duration + 's';
+    const dur = Math.random() * 3 + 2;
+    heart.style.animationDuration = dur + 's';
     document.body.appendChild(heart);
-    setTimeout(() => { heart.remove(); }, duration * 1000);
+    setTimeout(() => heart.remove(), dur * 1000);
 }
-
 
 
