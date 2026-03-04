@@ -63,3 +63,26 @@ button {
     font-family: 'Ma Shan Zheng', cursive;
     font-size: 1.1rem;
 }
+/* 爱心的样式 */
+.heart-falling {
+    position: fixed;
+    top: -20px; /* 从屏幕外开始掉 */
+    font-size: 20px;
+    color: #ff4d6d;
+    user-select: none;
+    z-index: 1000;
+    pointer-events: none; /* 让鼠标点不到它，不影响点按钮 */
+    animation: fall linear forwards; /* 动画：掉落、线性、结束后消失 */
+}
+
+/* 掉落动画 */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg); /* 掉到屏幕底部并旋转 */
+        opacity: 0; /* 落地时变透明 */
+    }
+}
