@@ -64,14 +64,28 @@ window.onload = function() {
 // 初始化相册
 function initAlbum() {
     const photoList = document.getElementById('photo-list');
+    
+    // 监控点 1：检查能不能找到盒子
+    if (!photoList) {
+        console.error("【关键错误】：在 HTML 里找不到 id 为 photo-list 的 div！");
+        return;
+    }
+
+    console.log("【提示】：找到盒子了，准备装载 " + TOTAL_PHOTOS + " 张照片...");
+
     for (let i = 1; i <= TOTAL_PHOTOS; i++) {
         const slideWrap = document.createElement('div');
         slideWrap.classList.add('slide');
         if (i === 1) slideWrap.classList.add('active');
 
         const img = document.createElement('img');
-        img.src = `${i}.jpg`; // 确保文件名是 1.jpg, 2.jpg...
+        img.src = `${i}.jpg`; 
         
+        // 监控点 2：检查照片文件是否正常触发加载
+        img.onerror = function() {
+            console.warn("【警告】：照片 " + i + ".jpg 加载失败，请检查文件名和后缀！");
+        };
+
         const noteDiv = document.createElement('div');
         noteDiv.classList.add('photo-note');
         noteDiv.innerText = loveNotes[i-1] || "每一个瞬间都值得被记录";
@@ -80,6 +94,9 @@ function initAlbum() {
         slideWrap.appendChild(noteDiv);
         photoList.appendChild(slideWrap);
     }
+    
+    // 监控点 3：确认循环是否跑完
+    console.log("【完成】：照片标签全部生成完毕！");
 }
 
 // 切换照片逻辑
@@ -138,4 +155,5 @@ function createHeart() {
     document.body.appendChild(heart);
     setTimeout(() => { heart.remove(); }, duration * 1000);
 }
+
 
