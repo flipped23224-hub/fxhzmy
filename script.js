@@ -1,7 +1,41 @@
 /**
  * 恋爱网页核心逻辑 - 全能版
  */
+// 1. 这里填入你的 20 句情话
+const loveNotes = [
+    "第一张：第一张合照 不太敢亲密",
+    "第二张：这时候拍合照还很羞涩！",
+    "第三张：第一次正式约会",
+    "第四张：第一次来学校找我",
+    "第五张：第一次一起跨年看电影",
+    "第六张：在一起一年啦",
+    "第七张：喜欢你认真看我的样子",
+    "第八张：这张图里有两个人很帅",
+    "第九张：你抽空来见我",
+    "第十张：我们在一起500天啦",
+    "第十一张：喜欢你拿相机拍我们两个",
+    "第十二张：这张照片的光线真好",
+    "第十三张：在这里留下了kiss视频",
+    "第十四张：带着新做的美甲又出发旅游啦",
+    "第十五张：两个公主",
+    "第十六张：我们一起做了戒指",
+    "第十七张：第一次拍大头贴",
+    "第十八张：你偷偷跑来找我",
+    "第十九张：我们1000天啦",
+    "第二十张：第一次一起滑雪"
+];
 
+// 2. 这里的日期改成你们在一起的日子！
+const START_DATE_STR = '2023-02-24 22:30:00'; 
+
+const TOTAL_PHOTOS = 20; 
+let currentSlide = 0;
+
+window.onload = function() {
+    initAlbum(); 
+    setInterval(createHeart, 300); // 开启爱心雨
+    setInterval(nextSlide, 5000);  // 开启自动切图
+};
 // 1. 当页面全部加载完毕后，再执行里面的逻辑（确保能抓到按钮和播放器）
 window.onload = function() {
     console.log("网页已就绪！");
@@ -25,13 +59,47 @@ window.onload = function() {
         // 弹出甜蜜提示
         alert("💕 思念已送达，听听这首属于我们的歌~");
     };
-
-    // --- 功能 B: 开启爱心雨特效 ---
-    // 每隔 300 毫秒生成一个爱心
-    setInterval(createHeart, 300);
 };
 
-// --- 功能 C: 恋爱计时器逻辑 ---
+// 初始化相册
+function initAlbum() {
+    const photoList = document.getElementById('photo-list');
+    for (let i = 1; i <= TOTAL_PHOTOS; i++) {
+        const slideWrap = document.createElement('div');
+        slideWrap.classList.add('slide');
+        if (i === 1) slideWrap.classList.add('active');
+
+        const img = document.createElement('img');
+        img.src = `${i}.jpg`; // 确保文件名是 1.jpg, 2.jpg...
+        
+        const noteDiv = document.createElement('div');
+        noteDiv.classList.add('photo-note');
+        noteDiv.innerText = loveNotes[i-1] || "每一个瞬间都值得被记录";
+
+        slideWrap.appendChild(img);
+        slideWrap.appendChild(noteDiv);
+        photoList.appendChild(slideWrap);
+    }
+}
+
+// 切换照片逻辑
+function showSlide(index) {
+    const slides = document.getElementsByClassName('slide');
+    if (slides.length === 0) return;
+    if (index >= slides.length) currentSlide = 0;
+    else if (index < 0) currentSlide = slides.length - 1;
+    else currentSlide = index;
+
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove('active');
+    }
+    slides[currentSlide].classList.add('active');
+}
+
+function nextSlide() { showSlide(currentSlide + 1); }
+function prevSlide() { showSlide(currentSlide - 1); }
+
+// 倒计时逻辑
 function updateTimer() {
     const startDate = new Date('2023-02-24 22:30:00'); // 👈 重要：记得改成你们的纪念日！
     const now = new Date();
@@ -58,26 +126,15 @@ function updateTimer() {
 setInterval(updateTimer, 1000);
 updateTimer(); // 立即执行一次，防止首秒空白
 
-// --- 功能 D: 制造飘落爱心的函数 ---
+// 爱心雨逻辑
 function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('heart-falling');
     heart.innerHTML = '❤️'; 
-    
-    // 随机位置 (0-100vw 代表屏幕宽度)
     heart.style.left = Math.random() * 100 + 'vw';
-    
-    // 随机大小 (10px - 30px)
     heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-    
-    // 随机掉落速度 (2s 到 5s)
     const duration = Math.random() * 3 + 2;
     heart.style.animationDuration = duration + 's';
-    
     document.body.appendChild(heart);
-
-    // 动画结束后自动删除，释放内存
-    setTimeout(() => {
-        heart.remove();
-    }, duration * 1000);
+    setTimeout(() => { heart.remove(); }, duration * 1000);
 }
