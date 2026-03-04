@@ -1,12 +1,18 @@
 function sendLove() {
-    // 1. 获取那个隐形的播放器
     const audio = document.getElementById('myAudio');
-    // 2. 播放音乐
-    audio.play().catch(error => {
-        console.log("播放失败，可能是文件路径不对:", error);
+    
+    // 强制从头开始播放
+    audio.currentTime = 0; 
+    
+    // 尝试播放并捕获报错
+    audio.play().then(() => {
+        console.log("音乐开始播放了！");
+        alert("💕 思念已送达，听听这首歌~");
+    }).catch(error => {
+        // 如果失败了，会在浏览器控制台告诉你为什么
+        console.error("播放失败的原因是:", error);
+        alert("音乐加载中，请稍等一秒再试哦！");
     });
-    // 3. 原有的弹出提示（也可以改成更浪漫的话）
-    alert("💕 思念已送达，这首歌送给你~");
 }// script.js
 function updateTimer() {
     const startDate = new Date('2023-02-24 22:30:00'); // 👈 改成你们在一起的确切时间
@@ -62,4 +68,5 @@ function createHeart() {
 
 // 每 300 毫秒生成一个爱心
 setInterval(createHeart, 300);
+
 
