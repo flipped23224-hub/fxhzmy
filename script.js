@@ -28,4 +28,30 @@ updateTimer();
 
 function sendLove() {
     alert("💕 信号已发射！记得看手机哦~");
+
 }
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart-falling');
+    heart.innerHTML = '❤️'; // 你也可以换成 💕 或 🌸
+    
+    // 随机位置
+    heart.style.left = Math.random() * 100 + 'vw';
+    
+    // 随机大小
+    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+    
+    // 随机掉落速度 (2s 到 5s 之间)
+    const duration = Math.random() * 3 + 2;
+    heart.style.animationDuration = duration + 's';
+    
+    document.body.appendChild(heart);
+
+    // 动画结束后，把这个爱心从网页里删掉，不然网页会卡
+    setTimeout(() => {
+        heart.remove();
+    }, duration * 1000);
+}
+
+// 每 300 毫秒生成一个爱心
+setInterval(createHeart, 300);
