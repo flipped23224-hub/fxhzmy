@@ -86,3 +86,38 @@ button {
         opacity: 0; /* 落地时变透明 */
     }
 }
+/* 照片包装盒 */
+.slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 情话文字样式：浮在照片下方 */
+.photo-note {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+    color: white;
+    padding: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    backdrop-filter: blur(5px); /* 毛玻璃效果，很高级 */
+    font-family: 'Ma Shan Zheng', cursive; /* 使用之前的浪漫字体 */
+}
