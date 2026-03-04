@@ -1,92 +1,39 @@
-/* style.css */
+/* 全局样式 */
 body {
-    background: linear-gradient(135deg, #fff5f5 0%, #fed7e2 100%); /* 渐变粉色背景 */
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7e2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    /* 应用艺术字体 */
-    font-family: 'Ma Shan Zheng', cursive, sans-serif;
+    font-family: 'Ma+Shan+Zheng', cursive, sans-serif;
+    overflow: hidden; /* 防止爱心雨撑开滚动条 */
 }
 
+/* 卡片容器 */
 .card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 20px;
     border-radius: 30px;
     box-shadow: 0 20px 50px rgba(255, 105, 180, 0.2);
     text-align: center;
     width: 320px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
 }
 
-/* 照片美化 */
-.photo-frame {
-    width: 200px;
-    height: 200px;
+/* 相册外框 */
+.album-container {
+    width: 280px;
+    height: 280px;
     margin: 0 auto 20px;
-    border-radius: 50%; /* 圆形照片 */
+    position: relative;
+    border-radius: 20px;
     overflow: hidden;
-    border: 5px solid white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-#love-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 保证照片不缩放变形 */
-}
-
-h1 { color: #ff4d6d; font-size: 2.2rem; }
-
-#timer {
-    font-size: 1.2rem;
-    color: #555;
-    margin: 20px 0;
-    padding: 10px;
-    background: #fff0f3;
-    border-radius: 15px;
-}
-
-#timer span {
-    color: #ff4d6d;
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-button {
-    background: #ff4d6d;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 1.1rem;
-}
-/* 爱心的样式 */
-.heart-falling {
-    position: fixed;
-    top: -20px; /* 从屏幕外开始掉 */
-    font-size: 20px;
-    color: #ff4d6d;
-    user-select: none;
-    z-index: 1000;
-    pointer-events: none; /* 让鼠标点不到它，不影响点按钮 */
-    animation: fall linear forwards; /* 动画：掉落、线性、结束后消失 */
-}
-
-/* 掉落动画 */
-@keyframes fall {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) rotate(360deg); /* 掉到屏幕底部并旋转 */
-        opacity: 0; /* 落地时变透明 */
-    }
-}
-/* 照片包装盒 */
+/* 单个照片容器 */
 .slide {
     width: 100%;
     height: 100%;
@@ -107,17 +54,69 @@ button {
     object-fit: cover;
 }
 
-/* 情话文字样式：浮在照片下方 */
+/* 情话字幕样式 */
 .photo-note {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+    background: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 10px;
+    padding: 8px;
     font-size: 0.9rem;
     text-align: center;
-    backdrop-filter: blur(5px); /* 毛玻璃效果，很高级 */
-    font-family: 'Ma Shan Zheng', cursive; /* 使用之前的浪漫字体 */
+    backdrop-filter: blur(5px);
+}
+
+/* 切换箭头 */
+.album-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.album-nav span {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    user-select: none;
+}
+
+/* 计时器和按钮 */
+h1 { color: #ff4d6d; font-size: 1.8rem; margin: 10px 0; }
+#timer { font-size: 1.1rem; color: #555; margin-bottom: 20px; }
+#timer span { color: #ff4d6d; font-weight: bold; font-size: 1.3rem; }
+
+button {
+    background: #ff4d6d;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+}
+button:active { transform: scale(0.9); }
+
+/* 爱心雨动画 */
+.heart-falling {
+    position: fixed;
+    top: -20px;
+    user-select: none;
+    z-index: 1000;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
 }
