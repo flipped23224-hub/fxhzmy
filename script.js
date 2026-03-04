@@ -22,7 +22,7 @@ const loveNotes = [
     "第十七张：第一次拍大头贴",
     "第十八张：你偷偷跑来找我",
     "第十九张：我们1000天啦",
-    "第二十张：第一次一起滑雪",
+    "第二十张：第一次一起滑雪"
 ];
 
 // 2. 这里的日期改成你们在一起的日子！
@@ -155,5 +155,6 @@ function createHeart() {
     document.body.appendChild(heart);
     setTimeout(() => { heart.remove(); }, duration * 1000);
 }
+
 
 
