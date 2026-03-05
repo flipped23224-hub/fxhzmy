@@ -90,10 +90,23 @@ function prevSlide() { showSlide(currentSlide - 1); }
 
 function sendLove() {
     const audio = document.getElementById('myAudio');
-    if (audio) {
-        audio.play().then(() => console.log("🎵 音乐播放中")).catch(e => console.log("🔇 自动播放被拦截"));
+    
+    // 技巧 1：先尝试“加载”一下，唤醒浏览器
+    audio.load(); 
+
+    // 技巧 2：在弹出提示前立即尝试播放
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            console.log("手机端播放成功！");
+            alert("💕 思念已送达，听听这首歌~");
+        }).catch(error => {
+            console.log("播放被拦截:", error);
+            // 如果还是不行，引导用户点一下网页任何地方
+            alert("由于浏览器限制，请点一下屏幕后再点按钮哦！");
+        });
     }
-    alert("💕 思念已送达！");
 }
 
 function startTimer() {
@@ -118,6 +131,7 @@ function createHeart() {
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), dur * 1000);
 }
+
 
 
 
